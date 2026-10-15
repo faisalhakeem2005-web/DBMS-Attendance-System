@@ -1,0 +1,154 @@
+[
+ {
+  "id": "TC-01",
+  "feature": "Add student",
+  "action": "Submit valid student form",
+  "expected": "Student added",
+  "actual": "Student added.",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-02",
+  "feature": "Unique roll number",
+  "action": "Add a second student with an existing roll number",
+  "expected": "Rejected (UNIQUE)",
+  "actual": "Rejected by database rule: UNIQUE constraint failed: student.roll_no",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-03",
+  "feature": "Year range check",
+  "action": "Add student with year = 9",
+  "expected": "Rejected (CHECK)",
+  "actual": "Rejected by database rule: CHECK constraint failed: year BETWEEN 1 AND 4",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-04",
+  "feature": "Controlled delete",
+  "action": "Delete a student who has attendance records",
+  "expected": "Rejected (FOREIGN KEY)",
+  "actual": "Rejected by database rule: FOREIGN KEY constraint failed",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-05",
+  "feature": "Create session",
+  "action": "Faculty creates a lecture for CS201-A",
+  "expected": "Class session created",
+  "actual": "Class session created.",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-06",
+  "feature": "Duplicate session",
+  "action": "Create the same session again",
+  "expected": "Rejected (UNIQUE)",
+  "actual": "Rejected by database rule: UNIQUE constraint failed: class_session.section_id, class_session.session_date, class_session.start_time",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-07",
+  "feature": "Time validation",
+  "action": "Create a session ending before it starts",
+  "expected": "Rejected (CHECK)",
+  "actual": "Rejected by database rule: CHECK constraint failed: end_time &gt; start_time",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-08",
+  "feature": "Mark attendance",
+  "action": "Mark 10 students of CS201-A (1 absent)",
+  "expected": "Attendance saved; 10 rows",
+  "actual": "Attendance saved. 10 rows",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-09",
+  "feature": "Enrolment check",
+  "action": "Mark student 15 (not in CS201-A) present",
+  "expected": "Rejected (trigger)",
+  "actual": "Student is not enrolled in the section of this session",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-10",
+  "feature": "Submit leave",
+  "action": "Student 1 applies 1 day casual leave",
+  "expected": "Leave application submitted",
+  "actual": "Leave application submitted.",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-11",
+  "feature": "Leave duration limit",
+  "action": "Apply 8 days casual leave (max 3)",
+  "expected": "Rejected (max days)",
+  "actual": "Rejected by database rule: Leave duration exceeds the maximum days allowed for this leave type",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-12",
+  "feature": "Overlapping leave",
+  "action": "Apply leave overlapping a pending one",
+  "expected": "Rejected (overlap)",
+  "actual": "Rejected by database rule: Leave dates overlap with another pending/approved application",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-13",
+  "feature": "Date validation",
+  "action": "From-date later than to-date",
+  "expected": "Rejected (validation)",
+  "actual": "From-date must not be after to-date.",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-14",
+  "feature": "Authorized approval",
+  "action": "Faculty 3 approves the pending leave",
+  "expected": "Status APPROVED + student alert",
+  "actual": "Leave approved. status=APPROVED, alerts=1",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-15",
+  "feature": "Unauthorized approval",
+  "action": "Faculty 1 decides leave of student 12 (not his student)",
+  "expected": "Rejected (trigger)",
+  "actual": "Rejected by database rule: Faculty is not assigned to any section of this student",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-16",
+  "feature": "Excused absence",
+  "action": "Count ABSENT marks that fall inside approved leaves",
+  "expected": "0 (all converted to EXCUSED)",
+  "actual": "0",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-17",
+  "feature": "Attendance percentage",
+  "action": "Compare view result with manual calculation (student 1, CS201-A)",
+  "expected": "Both values equal",
+  "actual": "view=87.5, manual=87.5",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-18",
+  "feature": "Shortage alerts",
+  "action": "Run alert generation twice",
+  "expected": "No duplicate alerts on second run",
+  "actual": "count 31 -> 31",
+  "status": "Pass"
+ },
+ {
+  "id": "TC-19",
+  "feature": "Makeup date rule",
+  "action": "Schedule a makeup before the original session date",
+  "expected": "Rejected (trigger)",
+  "actual": "Makeup date cannot be earlier than the original session date",
+  "status": "Pass"
+ }
+]
